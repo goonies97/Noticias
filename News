@@ -1,0 +1,78 @@
+const { config } = require("dotenv");
+const { Configuration, OpenAIApi } = require("openai");
+const readline = require("readline");
+const Parser = require("rss-parser");
+const fs = require("fs");
+
+config();
+
+// Initialize the RSS parser
+const parser = new Parser();
+
+// Initialize the OpenAI API
+const openai = new OpenAIApi(new Configuration({
+    apiKey: process.env.API_KEY
+}));
+
+// Initialize the readline interface
+const userInterface = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
+
+// Initialize an empty array to store the chat history
+const chatHistory = [];
+
+async function promptUserForTitle(title) {
+    return new Promise((resolve) => {
+        userInterface.question(`Enter your response to "${title}": `, (input) => {
+            resolve(input);
+        });
+    });
+}
+
+async function generateNewsFromTitle(title) {
+    // Prompt the user for a response to the title
+    const input = await promptUserForTitle(title);
+    const message = { role: "user", content: input };
+
+    // Add the user's response to the chat history
+    chatHistory.push(message);
+
+    // Generate news based on the chat history
+    const res = await openai.createChatCompletion({
+        model: "text-davinci-002",
+        n: 1,
+        max_tokens: 150,
+        messages: chatHistory
+    });
+
+    // Extract the generated news from the API response
+    const generatedNews = res.data.choices[0].text;
+
+    // Write the generated news to a file
+    fs.appendFileSync("news.txt", generatedNews + "\n");
+
+    // Return the generated news
+    return generatedNews;
+}
+
+async function run() {
+    // Parse the RSS feed
+    const feed = await parser.parseURL("https://example.com/feed");
+
+    for (const item of feed.items) {
+        try {
+            // Generate news from the title
+            const generatedNews = await generateNewsFromTitle(item.title);
+            console.log(generatedNews);
+        } catch (error) {
+            console.error(`Error generating news for title "${item.title}":`, error);
+        }
+    }
+
+    // Close the readline interface
+    userInterface.close();
+}
+
+run();
