@@ -10,7 +10,7 @@ import time
 print("Cobot 0.4.3")
 print("Desarrollado por Raul Angel Cobos Fuantos")
 # Set the OpenAI API key as an environment variable
-openai.api_key = "API" 
+openai.api_key = "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" 
 
 
 # Define the RSS feed URL that you want to use
@@ -65,9 +65,6 @@ async def rewrite_titles():
     # Update the previous number of entries with the current one
     prev_num_entries = curr_num_entries
 
-    # Change the default browser to Firefox
-    pywhatkit.change_browser(True)
-    pywhatkit.change_browser("firefox")
 
     # Grupo de WhatsApp
     group_link = "https://chat.whatsapp.com/DxNsQSERT7r9BZH8mqjVMC"
