@@ -6,8 +6,8 @@ import asyncio
 import datetime
 import pywhatkit
 
-print("Cobot 0.4.2")
-print("Desarrollado por Raúl Angel Cobos Fuantos")
+print("Cobot 0.4.3")
+print("Desarrollado por Raul Angel Cobos Fuantos")
 # Set the OpenAI API key as an environment variable
 openai.api_key = "API" 
 
