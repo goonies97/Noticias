@@ -4,11 +4,13 @@ import openai
 import feedparser
 import asyncio
 import datetime
+import pywhatkit
 
 print("Cobot 0.4.2")
 print("Desarrollado por Raúl Angel Cobos Fuantos")
 # Set the OpenAI API key as an environment variable
 openai.api_key = "API" 
+
 
 # Define the RSS feed URL that you want to use
 rss_url = "https://noticiasaguascalientes.com/category/prueba/feed" 
@@ -57,6 +59,19 @@ async def rewrite_titles():
       print()
     # Update the previous number of entries with the current one
     prev_num_entries = curr_num_entries
+
+    # Change the default browser to Firefox
+    pywhatkit.change_browser(True)
+
+    # Grupo de WhatsApp
+    group_link = "https://chat.whatsapp.com/DxNsQSERT7r9BZH8mqjVMC"
+
+    # Loop through the rewritten titles and send them to the group
+    for rewritten_title in rewritten_titles:
+    # Use the sendwhatmsg function to send a message to the group
+    pywhatkit.sendwhatmsg(group_link, rewritten_title, 12, 30)
+    # Wait for some time before sending the next message
+    time.sleep(10)
 
 # Define another coroutine function that runs the rewrite_titles function every certain interval of time (for example, every 10 seconds)
 async def main():
