@@ -62,6 +62,7 @@ async def rewrite_titles():
 
     # Change the default browser to Firefox
     pywhatkit.change_browser(True)
+    pywhatkit.change_browser("firefox")
 
     # Grupo de WhatsApp
     group_link = "https://chat.whatsapp.com/DxNsQSERT7r9BZH8mqjVMC"
