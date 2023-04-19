@@ -3,8 +3,9 @@ import os
 import openai
 import feedparser
 import asyncio
+import datetime
 
-print("Cobot 0.4.0")
+print("Cobot 0.4.1")
 print("Desarrollado por Raúl Angel Cobos Fuantos")
 
 # Set the OpenAI API key as an environment variable
@@ -40,6 +41,10 @@ async def rewrite_titles():
     # Create and write to a new txt file for each rewritten title
     with open(file_name, "w") as f:
       f.write(rewritten_title)
+    # Print the rewritten title, along with the date and time, in the command prompt
+    print(f"Rewritten title: {rewritten_title}")
+    print(f"Date and time: {datetime.datetime.now()}")
+    print()
 
 # Define another coroutine function that runs the rewrite_titles function every certain interval of time (for example, every 10 seconds)
 async def main():
