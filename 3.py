@@ -5,46 +5,57 @@ import feedparser
 import asyncio
 import datetime
 
-print("Cobot 0.4.1")
+print("Cobot 0.4.2")
 print("Desarrollado por Raúl Angel Cobos Fuantos")
 
 # Set the OpenAI API key as an environment variable
-openai.api_key = "API" # Replace with your actual API key
+openai.api_key = "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"  # Replace with your actual API key
 
 # Define the RSS feed URL that you want to use
-rss_url = "https://noticiasaguascalientes.com/category/prueba/feed" # Replace with your actual RSS feed URL
+rss_url = "https://noticiasaguascalientes.com/category/prueba/feed" 
 
 # Define the path where you want to save the rewritten titles
-path = "C:/Users/Raúl Angel Cobos/OneDrive/Documentos/GPT/Titles" # Replace with your desired path
+path = "C:/Users/Raúl Angel Cobos/OneDrive/Documentos/GPT/Titles" 
+
+# Define a global variable to store the previous number of entries in the feed
+prev_num_entries = 0
 
 # Define a coroutine function that fetches the RSS feed, rewrites the titles, and saves them to new txt files
 async def rewrite_titles():
+  # Declare the global variable
+  global prev_num_entries
   # Fetch the RSS feed using feedparser
   feed = feedparser.parse(rss_url)
-  # Loop through the entries of the feed
-  for index, entry in enumerate(feed.entries):
-    # Get the title of each entry
-    title = entry.title
-    # Use ChatGPT to rewrite the title using the Completion API
-    response = openai.Completion.create(
-  engine="text-davinci-002",
-  prompt=title,
-  max_tokens=200,
-  temperature=0.1,
-  frequency_penalty=1.0,
-  stop="."
-    )
-    # Get the rewritten title from the text attribute of the first choice
-    rewritten_title = response.choices[0].text
-    # Create a file name for each rewritten title using the path and index
-    file_name = os.path.join(path, "rewritten_title_" + str(index) + ".txt")
-    # Create and write to a new txt file for each rewritten title
-    with open(file_name, "w") as f:
-      f.write(rewritten_title)
-    # Print the rewritten title, along with the date and time, in the command prompt
-    print(f"Rewritten title: {rewritten_title}")
-    print(f"Date and time: {datetime.datetime.now()}")
-    print()
+  # Get the current number of entries in the feed
+  curr_num_entries = len(feed.entries)
+  # Check if the current number of entries is greater than the previous one
+  if curr_num_entries > prev_num_entries:
+    # Loop through the new entries of the feed (from prev_num_entries to curr_num_entries)
+    for index in range(prev_num_entries, curr_num_entries):
+      # Get the title of each entry
+      title = feed.entries[index].title
+      # Use ChatGPT to rewrite the title using the Completion API
+      response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=title,
+        max_tokens=200,
+        temperature=0.1,
+        frequency_penalty=1.0,
+        stop="."
+      )
+      # Get the rewritten title from the text attribute of the first choice
+      rewritten_title = response.choices[0].text
+      # Create a file name for each rewritten title using the path and index
+      file_name = os.path.join(path, "rewritten_title_" + str(index) + ".txt")
+      # Create and write to a new txt file for each rewritten title
+      with open(file_name, "w") as f:
+        f.write(rewritten_title)
+      # Print the rewritten title, along with the date and time, in the command prompt
+      print(f"Rewritten title: {rewritten_title}")
+      print(f"Date and time: {datetime.datetime.now()}")
+      print()
+    # Update the previous number of entries with the current one
+    prev_num_entries = curr_num_entries
 
 # Define another coroutine function that runs the rewrite_titles function every certain interval of time (for example, every 10 seconds)
 async def main():
