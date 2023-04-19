@@ -11,7 +11,7 @@ openai.api_key = "API" # Replace with your actual API key
 rss_url = "https://noticiasaguascalientes.com/category/prueba/feed" # Replace with your actual RSS feed URL
 
 # Define the path where you want to save the rewritten titles
-path = "C:/Users/Raúl Angel Cobos/OneDrive/Documentos/GPT" # Replace with your desired path
+path = "C:/Users/Raúl Angel Cobos/OneDrive/Documentos/GPT/Titles" # Replace with your desired path
 
 # Define a coroutine function that fetches the RSS feed, rewrites the titles, and saves them to new txt files
 async def rewrite_titles():
