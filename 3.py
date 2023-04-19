@@ -5,6 +5,7 @@ import feedparser
 import asyncio
 import datetime
 import pywhatkit
+import time
 
 print("Cobot 0.4.3")
 print("Desarrollado por Raul Angel Cobos Fuantos")
@@ -20,6 +21,8 @@ path = "C:/Users/Raúl Angel Cobos/OneDrive/Documentos/GPT/Titles"
 
 # Define a global variable to store the previous number of entries in the feed
 prev_num_entries = 0
+
+rewritten_titles = []
 
 # Define a coroutine function that fetches the RSS feed, rewrites the titles, and saves them to new txt files
 async def rewrite_titles():
@@ -48,6 +51,8 @@ async def rewrite_titles():
       )
       # Get the rewritten title from the text attribute of the first choice
       rewritten_title = response.choices[0].text
+      # Append the rewritten title to the rewritten_titles list
+      rewritten_titles.append(rewritten_title)
       # Create a file name for each rewritten title using the path and index
       file_name = os.path.join(path, "rewritten_title_" + str(index) + ".txt")
       # Create and write to a new txt file for each rewritten title
@@ -70,7 +75,7 @@ async def rewrite_titles():
     # Loop through the rewritten titles and send them to the group
     for rewritten_title in rewritten_titles:
     # Use the sendwhatmsg function to send a message to the group
-    pywhatkit.sendwhatmsg(group_link, rewritten_title, 12, 30)
+        pywhatkit.sendwhatmsg(group_link, rewritten_title, 12, 30)
     # Wait for some time before sending the next message
     time.sleep(10)
 
