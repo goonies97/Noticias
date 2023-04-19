@@ -7,9 +7,8 @@ import datetime
 
 print("Cobot 0.4.2")
 print("Desarrollado por Raúl Angel Cobos Fuantos")
-
 # Set the OpenAI API key as an environment variable
-openai.api_key = "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"  # Replace with your actual API key
+openai.api_key = "API" 
 
 # Define the RSS feed URL that you want to use
 rss_url = "https://noticiasaguascalientes.com/category/prueba/feed" 
@@ -30,10 +29,12 @@ async def rewrite_titles():
   curr_num_entries = len(feed.entries)
   # Check if the current number of entries is greater than the previous one
   if curr_num_entries > prev_num_entries:
+    # Sort the entries by date using the sorted function and a lambda function
+    sorted_entries = sorted(feed.entries, key=lambda e: e.published_parsed)
     # Loop through the new entries of the feed (from prev_num_entries to curr_num_entries)
     for index in range(prev_num_entries, curr_num_entries):
-      # Get the title of each entry
-      title = feed.entries[index].title
+      # Get the title of each entry from the sorted list
+      title = sorted_entries[index].title
       # Use ChatGPT to rewrite the title using the Completion API
       response = openai.Completion.create(
         engine="text-davinci-002",
