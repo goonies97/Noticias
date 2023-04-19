@@ -5,23 +5,20 @@ import feedparser
 import asyncio
 
 # Set the OpenAI API key as an environment variable
-openai.api_key = "API"
-#openai.api_key = os.getenv("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") # Replace with your actual API key
+openai.api_key = "API" # Replace with your actual API key
 
 # Define the RSS feed URL that you want to use
-rss_url = "https://rss.app/feeds/Co8Y81kx7ysKRKYO.xml" # Replace with your actual RSS feed URL
+rss_url = "https://noticiasaguascalientes.com/category/prueba/feed/" # Replace with your actual RSS feed URL
 
-# Define the file name and path where you want to save the rewritten titles
-file_name = "rewritten_titles.txt" # Replace with your desired file name and path
+# Define the path where you want to save the rewritten titles
+path = "C:/Users/Raúl Angel Cobos/OneDrive/Documentos/GPT" # Replace with your desired path
 
-# Define a coroutine function that fetches the RSS feed, rewrites the titles, and saves them to a file
+# Define a coroutine function that fetches the RSS feed, rewrites the titles, and saves them to new txt files
 async def rewrite_titles():
   # Fetch the RSS feed using feedparser
   feed = feedparser.parse(rss_url)
-  # Open the file in write mode
-  file = open(file_name, "w")
   # Loop through the entries of the feed
-  for entry in feed.entries:
+  for index, entry in enumerate(feed.entries):
     # Get the title of each entry
     title = entry.title
     # Use ChatGPT to rewrite the title using the Completion API
@@ -32,13 +29,14 @@ async def rewrite_titles():
   temperature=0.7,
   frequency_penalty=0.5,
   stop="."
-)
+    )
     # Get the rewritten title from the text attribute of the first choice
     rewritten_title = response.choices[0].text
-    # Write the rewritten title to the file on a new line
-    file.write(rewritten_title + "\n")
-  # Close the file when done
-  file.close()
+    # Create a file name for each rewritten title using the path and index
+    file_name = os.path.join(path, "rewritten_title_" + str(index) + ".txt")
+    # Create and write to a new txt file for each rewritten title
+    with open(file_name, "w") as f:
+      f.write(rewritten_title)
 
 # Define another coroutine function that runs the rewrite_titles function every certain interval of time (for example, every 10 seconds)
 async def main():
