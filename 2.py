@@ -5,10 +5,11 @@ import feedparser
 import asyncio
 
 # Set the OpenAI API key as an environment variable
-openai.api_key = os.getenv(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) # Replace with your actual API key
+openai.api_key = "API"
+#openai.api_key = os.getenv("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") # Replace with your actual API key
 
 # Define the RSS feed URL that you want to use
-rss_url = https://rss.app/feeds/Co8Y81kx7ysKRKYO.xml # Replace with your actual RSS feed URL
+rss_url = "https://rss.app/feeds/Co8Y81kx7ysKRKYO.xml" # Replace with your actual RSS feed URL
 
 # Define the file name and path where you want to save the rewritten titles
 file_name = "rewritten_titles.txt" # Replace with your desired file name and path
@@ -25,13 +26,13 @@ async def rewrite_titles():
     title = entry.title
     # Use ChatGPT to rewrite the title using the Completion API
     response = openai.Completion.create(
-      engine="gpt-35-turbo",
-      prompt=title,
-      max_tokens=10,
-      temperature=0.7,
-      frequency_penalty=0.5,
-      stop="."
-    )
+  engine="text-davinci-002",
+  prompt=title,
+  max_tokens=200,
+  temperature=0.7,
+  frequency_penalty=0.5,
+  stop="."
+)
     # Get the rewritten title from the text attribute of the first choice
     rewritten_title = response.choices[0].text
     # Write the rewritten title to the file on a new line
