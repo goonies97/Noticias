@@ -4,6 +4,9 @@ import openai
 import feedparser
 import asyncio
 
+print("Cobot 0.4.0")
+print("Desarrollado por Raúl Angel Cobos Fuantos")
+
 # Set the OpenAI API key as an environment variable
 openai.api_key = "API" # Replace with your actual API key
 
